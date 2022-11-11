@@ -64,6 +64,15 @@ async function run() {
             const service = await serviceCollection.findOne(query);
             res.send(service);
         });
+
+        app.get('/homeServices', async (req, res) => {
+            const size = parseInt(req.query.size);
+            const query = {}
+            const cursor = serviceCollection.find(query);
+            const services = await cursor.sort({ service_id: -1 }).limit(size).toArray();
+            const count = await serviceCollection.estimatedDocumentCount();
+            res.send(services);
+        });
     }
     finally {
 
